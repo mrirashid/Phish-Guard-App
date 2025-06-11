@@ -7,6 +7,7 @@ import os, random, time
 # ─── INIT ─────────────────────────────────────────────────
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.config["SECRET_KEY"] = "change-this-to-something-random"
+# ←–– Make sure this is in place
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///instance/phishguard.db"
 db = SQLAlchemy(app)
 
@@ -27,25 +28,22 @@ def load_user(user_id):
 
 # ─── ROUTES ───────────────────────────────────────────────
 
-# Home/dashboard (protected)
 @app.route("/")
 @login_required
 def dashboard():
     return render_template("dashboard.html")
 
-# Email scanner page (protected)
 @app.route("/email")
 @login_required
 def email_page():
     return render_template("scan_email.html")
 
-# URL scanner page (protected)
 @app.route("/url")
 @login_required
 def url_page():
     return render_template("scan_url.html")
 
-# ---- Mock prediction logic for both APIs ----
+# ── Mock prediction logic ──────────────────────────────────
 def fake_prediction():
     verdict = random.choice(["Phishing", "Legitimate"])
     conf    = round(random.uniform(0.6, 0.95), 2)
@@ -73,7 +71,7 @@ def api_url():
 def register():
     if request.method == "POST":
         email = request.form["email"].lower()
-        pw = request.form["password"]
+        pw    = request.form["password"]
         if User.query.filter_by(email=email).first():
             flash("Email already registered", "danger")
             return redirect(url_for('register'))
@@ -88,8 +86,8 @@ def register():
 def login():
     if request.method == "POST":
         email = request.form["email"].lower()
-        pw = request.form["password"]
-        user = User.query.filter_by(email=email).first()
+        pw    = request.form["password"]
+        user  = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.pw_hash, pw):
             login_user(user)
             return redirect(url_for('dashboard'))
@@ -105,4 +103,6 @@ def logout():
 
 # ─── MAIN ─────────────────────────────────────────────────
 if __name__ == "__main__":
+    # Ensure the instance folder exists
+    os.makedirs(os.path.join(app.root_path, 'instance'), exist_ok=True)
     app.run(debug=True)
