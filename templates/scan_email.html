@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+  <h3 class="mb-4">Email Phishing Scanner</h3>
+
+  <!-- Upload control -->
+  <label class="form-label fw-bold">Choose an .eml file</label>
+  <input class="form-control" type="file" id="emlInput" accept=".eml">
+
+  <!-- Scan button -->
+  <button id="scanEmailBtn" class="btn btn-primary mt-3" disabled>Scan</button>
+
+  <!-- Result will appear here -->
+  <div id="emailResult" class="mt-4 d-none"></div>
+</div>
+
+<script src="{{ url_for('static', filename='js/email.js') }}"></script>
+{% endblock %}
