@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+  <h3 class="mb-4">URL Phishing Scanner</h3>
+
+  <label class="form-label fw-bold">Paste a URL</label>
+  <input id="urlInput" class="form-control" placeholder="https://example.com/login">
+
+  <button id="scanUrlBtn" class="btn btn-primary mt-3" disabled>Scan</button>
+
+  <div id="urlResult" class="mt-4 d-none"></div>
+</div>
+
+<script src="{{ url_for('static', filename='js/url.js') }}"></script>
+{% endblock %}

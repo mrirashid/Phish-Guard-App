@@ -30,7 +30,14 @@ def api_email():
 
 @app.route("/url")
 def url_page():
-    return "<h3>URL Scanner (coming soon)</h3>"
+    return render_template("scan_url.html")
+@app.post("/api/url")
+def api_url():
+    if not request.is_json:
+        return jsonify({"error": "Bad request"}), 400
+    verdict, conf = fake_prediction()
+    return jsonify({"verdict": verdict, "confidence": conf})
+
 
 # ─── MAIN ─────────────────────────────────────────────────
 if __name__ == "__main__":
